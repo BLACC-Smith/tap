@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import SocialButton from '../atoms/SocialButton';
+import { createUser } from '../../firebase/functions';
 
 const Container = styled.div`
 	width: 100vw;
@@ -85,6 +86,8 @@ const Link = styled.p`
 `;
 
 function Login() {
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	return (
 		<Container>
 			<Card>
@@ -97,9 +100,17 @@ function Login() {
 					<Or>Or</Or>
 					<Divider />
 				</OrSection>
-				<Input type="email" placeholder="Email" />
-				<Input type="password" placeholder="Password" />
-				<Button>Login</Button>
+				<Input
+					type="email"
+					placeholder="Email"
+					onChange={(e) => setEmail(e.target.value)}
+				/>
+				<Input
+					type="password"
+					placeholder="Password"
+					onChange={(e) => setPassword(e.target.value)}
+				/>
+				<Button onClick={() => createUser(email, password)}>Login</Button>
 				<Link>Don't have an account yet? Click here</Link>
 			</Card>
 		</Container>

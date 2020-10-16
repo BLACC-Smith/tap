@@ -11,11 +11,12 @@ const firebaseConfig = {
 	measurementId: 'G-NZXRF5R12C',
 };
 
-export default firebase = require('firebase');
+const firebase = require('firebase');
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 
 const firestore = firebase.firestore();
 const auth = firebase.auth();
 const storage = firebase.storage();
 
+export default firebase;
 export { firestore, auth, storage };
