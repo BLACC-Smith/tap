@@ -5,6 +5,7 @@ const createUser = (email, password, cb) => {
 		.createUserWithEmailAndPassword(email, password)
 		.then((user) => {
 			console.log({ user });
+			cb(user);
 		})
 		.catch((err) => console.log({ err }));
 };
@@ -13,8 +14,7 @@ const signInWithGoogle = (cb) => {
 	auth
 		.signInWithPopup(provider)
 		.then(async ({ user }) => {
-			const token = await user.getIdToken();
-			console.log({ token });
+			cb(user);
 		})
 		.catch((err) => {
 			console.log({ err });
@@ -26,8 +26,7 @@ const signInWithFacebook = (cb) => {
 	auth
 		.signInWithPopup(provider)
 		.then(async ({ user }) => {
-			const token = await user.getIdToken();
-			console.log({ token });
+			cb(user);
 		})
 		.catch((err) => {
 			console.log({ err });

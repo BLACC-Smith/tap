@@ -1,8 +1,13 @@
 import React from 'react';
-import Login from './components/organisms/Login';
+import MainContextProvider from './context/MainContext';
+import AppContainer from './components/organisms/AppContainer';
 
 function App() {
-	return <Login />;
+	return (
+		<MainContextProvider>
+			<AppContainer />
+		</MainContextProvider>
+	);
 }
 
 export default App;
