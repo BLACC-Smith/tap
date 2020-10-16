@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import SocialButton from '../atoms/SocialButton';
-import { createUser, signInWithGoogle } from '../../firebase/functions';
+import {
+	createUser,
+	signInWithGoogle,
+	signInWithFacebook,
+} from '../../firebase/functions';
 
 const Container = styled.div`
 	width: 100vw;
@@ -94,7 +98,7 @@ function Login() {
 				<Icon className="material-icons">lock</Icon>
 				<Title>Login</Title>
 				<SocialButton isGoogle onClick={signInWithGoogle} />
-				<SocialButton />
+				<SocialButton onClick={signInWithFacebook} />
 				<OrSection>
 					<Divider />
 					<Or>Or</Or>
