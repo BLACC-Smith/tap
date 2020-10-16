@@ -9,6 +9,8 @@ import Login from './Login';
 import Home from './Home';
 import { MainContext } from '../../context/MainContext';
 import { auth } from '../../firebase/config';
+import Sidebar from '../molecules/Sidebar';
+import styled from '@emotion/styled';
 
 const PrivateRoute = ({ children, loggedIn, ...rest }) => {
 	return (
@@ -29,6 +31,11 @@ const PrivateRoute = ({ children, loggedIn, ...rest }) => {
 		/>
 	);
 };
+const Container = styled.div`
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+`;
 function AppContainer() {
 	const { user, updateUser } = useContext(MainContext);
 	const loggedIn = window.localStorage.getItem('uid');
@@ -40,16 +47,19 @@ function AppContainer() {
 	}, []);
 
 	return (
-		<Router>
-			<Switch>
-				<Route path="/login">
-					<Login />
-				</Route>
-				<PrivateRoute loggedIn={user || loggedIn} path="/">
-					<Home />
-				</PrivateRoute>
-			</Switch>
-		</Router>
+		<Container>
+			<Router>
+				<Sidebar loggedIn={loggedIn} />
+				<Switch>
+					<Route path="/login">
+						<Login />
+					</Route>
+					<PrivateRoute loggedIn={user || loggedIn} path="/">
+						<Home />
+					</PrivateRoute>
+				</Switch>
+			</Router>
+		</Container>
 	);
 }
 

@@ -2,8 +2,15 @@ import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 import { MainContext } from '../../context/MainContext';
 import { auth } from '../../firebase/config';
+import Header from '../molecules/Header';
 
-const Container = styled.div``;
+const Container = styled.div`
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+	margin-left: 24px;
+`;
+
 function Home() {
 	const { updateUser } = useContext(MainContext);
 
@@ -15,8 +22,7 @@ function Home() {
 
 	return (
 		<Container>
-			Welcome Home
-			<button onClick={logout}>Sign out</button>
+			<Header />
 		</Container>
 	);
 }
