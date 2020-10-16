@@ -1,7 +1,8 @@
 import React from 'react';
+import Login from './components/organisms/Login';
 
 function App() {
-	return <div className="App">Tap rebuild</div>;
+	return <Login />;
 }
 
 export default App;
