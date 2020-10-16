@@ -29,9 +29,9 @@ const Label = styled.p`
 	margin-left: -35px;
 `;
 
-function SocialButton({ onPress, isGoogle = false }) {
+function SocialButton({ onClick, isGoogle = false }) {
 	return (
-		<Container isGoogle={isGoogle}>
+		<Container isGoogle={isGoogle} onClick={onClick}>
 			<Logo src={isGoogle ? googleLogo : facebookLogo} />
 			<Label>Continue with {isGoogle ? 'Google' : 'Facebook'}</Label>
 		</Container>
