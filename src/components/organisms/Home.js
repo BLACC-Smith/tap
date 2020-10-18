@@ -55,7 +55,7 @@ function Home() {
 				<AddCTA onClick={() => setShowPopup(true)}>
 					<Icon className="material-icons">keyboard_voice</Icon>
 				</AddCTA>
-				<AddChallenge show={showPopup} />
+				<AddChallenge show={showPopup} closeFn={setShowPopup} />
 			</AddContainer>
 		</Container>
 	);

@@ -62,7 +62,7 @@ const Logout = styled.div`
 	cursor: pointer;
 `;
 
-function Sidebar({ loggedIn }) {
+function Sidebar() {
 	const { user, updateUser } = useContext(MainContext);
 
 	const logout = () => {
@@ -70,7 +70,7 @@ function Sidebar({ loggedIn }) {
 		window.localStorage.setItem('uid', '');
 		auth.signOut();
 	};
-	return loggedIn || user ? (
+	return user ? (
 		<Container>
 			<LogoContainer>
 				<Logo src={tapLogo} />

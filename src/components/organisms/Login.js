@@ -95,12 +95,7 @@ function Login() {
 	let history = useHistory();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const { user, updateUser } = useContext(MainContext);
-
-	const updateGlobalState = async (user) => {
-		updateUser(user);
-		window.localStorage.setItem('uid', user.uid);
-	};
+	const { user } = useContext(MainContext);
 
 	useEffect(() => {
 		user && history.replace('/');
@@ -110,11 +105,8 @@ function Login() {
 			<Card>
 				<Icon className="material-icons">lock</Icon>
 				<Title>Login</Title>
-				<SocialButton
-					isGoogle
-					onClick={() => signInWithGoogle(updateGlobalState)}
-				/>
-				<SocialButton onClick={() => signInWithFacebook(updateGlobalState)} />
+				<SocialButton isGoogle onClick={signInWithGoogle} />
+				<SocialButton onClick={signInWithFacebook} />
 				<OrSection>
 					<Divider />
 					<Or>Or</Or>
@@ -130,9 +122,7 @@ function Login() {
 					placeholder="Password"
 					onChange={(e) => setPassword(e.target.value)}
 				/>
-				<Button onClick={() => createUser(email, password, updateGlobalState)}>
-					Login
-				</Button>
+				<Button onClick={() => createUser(email, password)}>Login</Button>
 				<Link>Don't have an account yet? Click here</Link>
 			</Card>
 		</Container>

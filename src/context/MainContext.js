@@ -11,6 +11,7 @@ const MainContextProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(AppReducer, initialState);
 
 	const updateUser = (payload) => {
+		console.log('updating user');
 		dispatch({ type: 'UPDATE_USER', payload });
 	};
 	return (

@@ -1,35 +1,48 @@
-import firebase, { auth } from './config';
+import firebase, { auth, firestore } from './config';
 
-const createUser = (email, password, cb) => {
-	auth
-		.createUserWithEmailAndPassword(email, password)
-		.then((user) => {
-			cb(user);
+const addUser = (uid) => {
+	firestore
+		.collection('users')
+		.doc(uid)
+		.set({
+			challenges: [],
+			followers: [],
+			following: [],
 		})
 		.catch((err) => console.log({ err }));
 };
-const signInWithGoogle = (cb) => {
+const createUser = (email, password) => {
+	auth
+		.createUserWithEmailAndPassword(email, password)
+		.then(async ({ user }) => addUser(user.uid))
+		.catch((err) => console.log({ err }));
+};
+const signInWithGoogle = () => {
 	var provider = new firebase.auth.GoogleAuthProvider();
 	auth
 		.signInWithPopup(provider)
-		.then(async ({ user }) => {
-			cb(user);
-		})
-		.catch((err) => {
-			console.log({ err });
-		});
+		.then(async ({ user }) => addUser(user.uid))
+		.catch((err) => console.log({ err }));
 };
-const signInWithFacebook = (cb) => {
+const signInWithFacebook = () => {
 	var provider = new firebase.auth.FacebookAuthProvider();
 	provider.setCustomParameters({ display: 'popup' });
 	auth
 		.signInWithPopup(provider)
-		.then(async ({ user }) => {
-			cb(user);
-		})
-		.catch((err) => {
-			console.log({ err });
-		});
+		.then(async ({ user }) => addUser(user.uid))
+		.catch((err) => console.log({ err }));
+};
+const createChallenge = (data) => {
+	firestore
+		.collection('challenges')
+		.add(data)
+		.catch((err) => console.log({ err }));
 };
 
-export { createUser, signInWithGoogle, signInWithFacebook };
+export {
+	createUser,
+	createChallenge,
+	addUser,
+	signInWithGoogle,
+	signInWithFacebook,
+};

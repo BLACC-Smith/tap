@@ -7,8 +7,9 @@
 }
 
 .sound-wave {
-	flex: 1;
 	border-radius: 16px;
 	max-height: 50px;
-	margin: 0 16px;
+	width: 50%;
+	flex: 1;
+	min-height: 50px;
 }

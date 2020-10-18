@@ -38,23 +38,22 @@ const Container = styled.div`
 `;
 function AppContainer() {
 	const { user, updateUser } = useContext(MainContext);
-	const loggedIn = window.localStorage.getItem('uid');
 
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => {
 			updateUser(user);
 		});
-	}, [updateUser]);
+	}, []);
 
 	return (
 		<Container>
 			<Router>
-				<Sidebar loggedIn={loggedIn} />
+				<Sidebar />
 				<Switch>
 					<Route path="/login">
 						<Login />
 					</Route>
-					<PrivateRoute loggedIn={user || loggedIn} path="/">
+					<PrivateRoute loggedIn={user} path="/">
 						<Home />
 					</PrivateRoute>
 				</Switch>
