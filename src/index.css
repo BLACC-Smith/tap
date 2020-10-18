@@ -5,3 +5,10 @@
 	font-family: 'Roboto', sans-serif;
 	outline: none;
 }
+
+.sound-wave {
+	flex: 1;
+	border-radius: 16px;
+	max-height: 50px;
+	margin: 0 16px;
+}

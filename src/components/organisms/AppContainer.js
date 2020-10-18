@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
 	BrowserRouter as Router,
 	Switch,
@@ -44,7 +44,7 @@ function AppContainer() {
 		auth.onAuthStateChanged((user) => {
 			updateUser(user);
 		});
-	}, []);
+	}, [updateUser]);
 
 	return (
 		<Container>

@@ -5,9 +5,11 @@ const Container = styled.div`
 	height: 10%;
 	width: 100%;
 	background: #fff;
-	padding: 16px;
+	padding: 12px;
 	display: flex;
 	justify-content: center;
+	position: relative;
+	z-index: 5;
 `;
 
 const SearchbarContainer = styled.div`
@@ -28,7 +30,7 @@ const Icon = styled.i`
 `;
 const Searchbar = styled.input`
 	height: 50px;
-	font-size: 20px;
+	font-size: 16px;
 	color: #525456;
 	border: none;
 	font-weight: 300;

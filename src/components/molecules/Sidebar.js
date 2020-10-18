@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 import { MainContext } from '../../context/MainContext';
 import tapLogo from '../../assets/tapLogo_D.jpg';
+import { auth } from '../../firebase/config';
 
 const Container = styled.div`
 	height: 100%;
@@ -17,7 +18,7 @@ const Container = styled.div`
 	align-items: center;
 `;
 const Icon = styled.i`
-	color: #537ea5;
+	color: ${({ active }) => (active ? '#ffc000' : '#c8c8c8')};
 	font-size: 32px;
 	flex: 1;
 	cursor: pointer;
@@ -47,22 +48,44 @@ const AccountInfo = styled.div`
 	flex: 1;
 	width: 100%;
 	padding: 24px;
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+`;
+const Logout = styled.div`
+	padding: 12px;
+	border-radius: 16px;
+	background: #eeeeee;
+	color: #9e9e9e;
+	width: 100%;
+	text-align: center;
+	cursor: pointer;
 `;
 
 function Sidebar({ loggedIn }) {
-	const { user } = useContext(MainContext);
+	const { user, updateUser } = useContext(MainContext);
+
+	const logout = () => {
+		updateUser(null);
+		window.localStorage.setItem('uid', '');
+		auth.signOut();
+	};
 	return loggedIn || user ? (
 		<Container>
 			<LogoContainer>
 				<Logo src={tapLogo} />
 			</LogoContainer>
 			<NavContainer>
-				<Icon className="material-icons">home</Icon>
+				<Icon active className="material-icons">
+					home
+				</Icon>
 				<Icon className="material-icons">favorite</Icon>
 				<Icon className="material-icons">dashboard</Icon>
 				<Icon className="material-icons">person</Icon>
 			</NavContainer>
-			<AccountInfo></AccountInfo>
+			<AccountInfo>
+				<Logout onClick={logout}>Logout</Logout>
+			</AccountInfo>
 		</Container>
 	) : null;
 }
