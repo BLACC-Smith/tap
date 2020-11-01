@@ -1,9 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Redirect,
 } from "react-router-dom";
 import Login from "./Login";
 import Home from "./Home";
@@ -14,56 +14,57 @@ import Sidebar from "../molecules/Sidebar";
 import styled from "@emotion/styled";
 
 const PrivateRoute = ({ children, loggedIn, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        loggedIn ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: location },
-            }}
-          />
-        )
-      }
-    />
-  );
+	return (
+		<Route
+			{...rest}
+			render={({ location }) =>
+				loggedIn ? (
+					children
+				) : (
+					<Redirect
+						to={{
+							pathname: "/login",
+							state: { from: location },
+						}}
+					/>
+				)
+			}
+		/>
+	);
 };
 const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
+	height: 100vh;
+	width: 100vw;
+	display: flex;
 `;
 function AppContainer() {
-  const { user, updateUser } = useContext(MainContext);
+	const { user, updateUser } = useContext(MainContext);
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      updateUser(user);
-    });
-  }, []);
+	useEffect(() => {
+		auth.onAuthStateChanged((user) => {
+			updateUser(user);
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-  return (
-    <Container>
-      <Router>
-        <Sidebar />
-        <Switch>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/newaccount">
-            <CreateAccount />
-          </Route>
-          <PrivateRoute loggedIn={user} path="/">
-            <Home />
-          </PrivateRoute>
-        </Switch>
-      </Router>
-    </Container>
-  );
+	return (
+		<Container>
+			<Router>
+				<Sidebar />
+				<Switch>
+					<Route path="/login">
+						<Login />
+					</Route>
+					<Route path="/newaccount">
+						<CreateAccount />
+					</Route>
+					<PrivateRoute loggedIn={user} path="/">
+						<Home />
+					</PrivateRoute>
+				</Switch>
+			</Router>
+		</Container>
+	);
 }
 
 export default AppContainer;

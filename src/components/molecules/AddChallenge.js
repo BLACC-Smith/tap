@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
-import styled from '@emotion/styled';
-import { ReactMic } from 'react-mic';
-import { MainContext } from '../../context/MainContext';
-import '../../index.css';
-import { createChallenge } from '../../firebase/functions';
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import styled from "@emotion/styled";
+import { ReactMic } from "react-mic";
+import { MainContext } from "../../context/MainContext";
+import "../../index.css";
+import { createChallenge } from "../../firebase/functions";
 
 const Container = styled.div`
 	width: 50vw;
@@ -46,9 +46,9 @@ const AnswerChoices = styled.div`
 `;
 const AnswerChoice = styled.div`
 	border-radius: 6px;
-	border: 1px solid ${({ isAnswer }) => (isAnswer ? '#537ea5' : '#c8c8c8')};
+	border: 1px solid ${({ isAnswer }) => (isAnswer ? "#537ea5" : "#c8c8c8")};
 	cursor: pointer;
-	background: ${({ isAnswer }) => (isAnswer ? '#e7f2f7' : '#fff')};
+	background: ${({ isAnswer }) => (isAnswer ? "#e7f2f7" : "#fff")};
 	margin-bottom: 8px;
 	padding: 12px 16px;
 	width: 100%;
@@ -65,7 +65,7 @@ const AnswerChoice = styled.div`
 		background: #e7f2f7;
 		color: #537ea5;
 	}`
-			: ''}
+			: ""}
 	&:hover {
 		background: #e7f2f7;
 		border: 1px solid #537ea5;
@@ -96,7 +96,7 @@ const PromptContainer = styled.div`
 	margin-bottom: 8px;
 	padding: 12px 16px;
 	width: 100%;
-	display: ${({ show }) => (show ? 'flex' : 'none')};
+	display: ${({ show }) => (show ? "flex" : "none")};
 	justify-content: flex-start;
 	align-items: center;
 	transition: all 0.3s;
@@ -139,7 +139,7 @@ const HelperContainer = styled.div`
 	background: #eeeeee;
 	border-radius: 6px;
 	padding: 4px 8px;
-	display: ${({ show }) => (show ? 'flex' : 'none')};
+	display: ${({ show }) => (show ? "flex" : "none")};
 `;
 const HelperText = styled.p`
 	margint-top: 6px;
@@ -151,10 +151,10 @@ const HelperText = styled.p`
 
 function AddChallenge({ show, closeFn }) {
 	const [recording, setRecording] = useState(false);
-	const [audioURL, setAudioUrl] = useState('');
+	const [audioURL, setAudioUrl] = useState("");
 	const [audio, setAudio] = useState(null);
 	const [answerChoices, setAnswerChoices] = useState([]);
-	const [helperText, setHelperText] = useState('');
+	const [helperText, setHelperText] = useState("");
 	const { user } = useContext(MainContext);
 
 	const recordingStopped = (recording) => {
@@ -166,14 +166,16 @@ function AddChallenge({ show, closeFn }) {
 			else audio.currentTime = 0;
 		}
 	};
-	const clearChallenge = () => {
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	const clearChallenge = useCallback(() => {
 		setRecording(false);
-		setAudioUrl('');
+		setAudioUrl("");
 		setAudio(null);
 		setAnswerChoices([]);
-		setHelperText('');
+		setHelperText("");
 		closeFn(false);
-	};
+	});
 
 	const removeAnswerChoice = (idx) => {
 		setAnswerChoices(
@@ -193,7 +195,7 @@ function AddChallenge({ show, closeFn }) {
 		);
 	};
 	const markCorrectAnswer = (e, idx) => {
-		if (e.target.tagName === 'DIV') {
+		if (e.target.tagName === "DIV") {
 			setAnswerChoices(
 				answerChoices.map((item, pos) => {
 					if (idx === pos) {
@@ -206,25 +208,25 @@ function AddChallenge({ show, closeFn }) {
 
 	const validateAnswerChoices = () => {
 		if (!audioURL) {
-			setHelperText('Record yourself before posting this challenge');
+			setHelperText("Record yourself before posting this challenge");
 			return;
 		}
 		if (answerChoices.length < 2) {
-			setHelperText('You must have at least 2 answer choices');
+			setHelperText("You must have at least 2 answer choices");
 			return;
 		} else {
 			if (answerChoices.some((item) => item.isAnswer)) {
 				createChallenge({ uid: user.uid, answerChoices, audioURL });
 				clearChallenge();
 			} else {
-				setHelperText('Select the correct answer');
+				setHelperText("Select the correct answer");
 			}
 		}
 	};
 
 	useEffect(() => {
 		!show && clearChallenge();
-	}, [show]);
+	}, [show, clearChallenge]);
 
 	useEffect(() => {
 		audioURL && setAudio(new Audio(audioURL));
@@ -240,7 +242,7 @@ function AddChallenge({ show, closeFn }) {
 						className="material-icons"
 						onClick={() => setRecording(!recording)}
 					>
-						{recording ? 'stop_circle' : 'keyboard_voice'}
+						{recording ? "stop_circle" : "keyboard_voice"}
 					</Icon>
 					<ReactMic
 						record={recording}
@@ -286,7 +288,7 @@ function AddChallenge({ show, closeFn }) {
 							answerChoices.length < 4 &&
 							setAnswerChoices([
 								...answerChoices,
-								{ id: answerChoices.length + 1, answer: '', isAnswer: false },
+								{ id: answerChoices.length + 1, answer: "", isAnswer: false },
 							])
 						}
 					>
