@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "@emotion/styled";
-import googleLogo from "../../assets/googleLogo.png";
-import facebookLogo from "../../assets/facebookLogo.png";
+import React from 'react';
+import styled from '@emotion/styled';
+import googleLogo from '../../assets/googleLogo.png';
+import facebookLogo from '../../assets/facebookLogo.png';
 
 const Container = styled.div`
 	position: relative;
@@ -12,7 +12,7 @@ const Container = styled.div`
 	display: flex;
 	align-items: center;
 	cursor: pointer;
-	background: ${({ isGoogle }) => (isGoogle ? "#dd4d3f" : "#0075fb")};
+	background: ${({ isGoogle }) => (isGoogle ? '#dd4d3f' : '#0075fb')};
 `;
 const Logo = styled.img`
 	height: 35px;
@@ -33,7 +33,7 @@ function SocialButton({ onClick, isGoogle = false }) {
 	return (
 		<Container isGoogle={isGoogle} onClick={onClick}>
 			<Logo src={isGoogle ? googleLogo : facebookLogo} />
-			<Label>Continue with {isGoogle ? "Google" : "Facebook"}</Label>
+			<Label>Continue with {isGoogle ? 'Google' : 'Facebook'}</Label>
 		</Container>
 	);
 }

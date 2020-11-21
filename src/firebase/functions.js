@@ -1,8 +1,8 @@
-import firebase, { auth, firestore } from "./config";
+import firebase, { auth, firestore } from './config';
 
 const addUser = (uid) => {
 	firestore
-		.collection("users")
+		.collection('users')
 		.doc(uid)
 		.set({
 			challenges: [],
@@ -11,13 +11,11 @@ const addUser = (uid) => {
 		})
 		.catch((err) => console.log({ err }));
 };
-const createUser = (email, password, callback) => {
+const createUser = (email, password) => {
 	auth
 		.createUserWithEmailAndPassword(email, password)
 		.then(async ({ user }) => addUser(user.uid))
-		.catch(function (err) {
-			callback(err);
-		});
+		.catch((err) => console.log({ err }));
 };
 const signInWithGoogle = () => {
 	var provider = new firebase.auth.GoogleAuthProvider();
@@ -28,7 +26,7 @@ const signInWithGoogle = () => {
 };
 const signInWithFacebook = () => {
 	var provider = new firebase.auth.FacebookAuthProvider();
-	provider.setCustomParameters({ display: "popup" });
+	provider.setCustomParameters({ display: 'popup' });
 	auth
 		.signInWithPopup(provider)
 		.then(async ({ user }) => addUser(user.uid))
@@ -36,7 +34,7 @@ const signInWithFacebook = () => {
 };
 const createChallenge = (data) => {
 	firestore
-		.collection("challenges")
+		.collection('challenges')
 		.add(data)
 		.catch((err) => console.log({ err }));
 };
