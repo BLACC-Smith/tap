@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 module.exports = {
 	env: {
 		browser: true,
@@ -18,4 +19,13 @@ module.exports = {
 		quotes: ['error', 'single'],
 		semi: ['error', 'always'],
 	},
+	overrides: [
+		{
+			files: ['*.js'],
+			rules: {
+				'react/prop-types': 'off',
+				'react/no-unescaped-entities': 'off',
+			},
+		},
+	],
 };
