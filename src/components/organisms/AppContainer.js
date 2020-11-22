@@ -43,7 +43,7 @@ function AppContainer() {
 		auth.onAuthStateChanged((user) => {
 			updateUser(user);
 		});
-	}, []);
+	}, [updateUser]);
 
 	return (
 		<Container>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import styled from '@emotion/styled';
 import { ReactMic } from 'react-mic';
 import { MainContext } from '../../context/MainContext';
@@ -166,14 +166,14 @@ function AddChallenge({ show, closeFn }) {
 			else audio.currentTime = 0;
 		}
 	};
-	const clearChallenge = () => {
+	const clearChallenge = useCallback(() => {
 		setRecording(false);
 		setAudioUrl('');
 		setAudio(null);
 		setAnswerChoices([]);
 		setHelperText('');
 		closeFn(false);
-	};
+	}, [closeFn]);
 
 	const removeAnswerChoice = (idx) => {
 		setAnswerChoices(
@@ -224,7 +224,7 @@ function AddChallenge({ show, closeFn }) {
 
 	useEffect(() => {
 		!show && clearChallenge();
-	}, [show]);
+	}, [show, clearChallenge]);
 
 	useEffect(() => {
 		audioURL && setAudio(new Audio(audioURL));
