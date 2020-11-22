@@ -4,6 +4,7 @@ import { ReactMic } from 'react-mic';
 import { MainContext } from '../../context/MainContext';
 import '../../index.css';
 import { createChallenge } from '../../firebase/functions';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const Container = styled.div`
 	width: 50vw;
@@ -148,10 +149,22 @@ const HelperText = styled.p`
 	font-weight: 400;
 	margin-left: 12px;
 `;
+const LoadingWrapper = styled.div`
+	position: absolute;
+	width: calc(100% - 32px);
+	height: calc(100% - 32px);
+	background: rgba(255, 255, 255, 0.95);
+	display: ${({ show }) => (show ? 'flex' : 'none')};
+	justify-content: center;
+	align-items: center;
+	z-index: 5;
+`;
 
 function AddChallenge({ show, closeFn }) {
 	const [recording, setRecording] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const [audioURL, setAudioUrl] = useState('');
+	const [audioBlob, setAudioBlob] = useState(null);
 	const [audio, setAudio] = useState(null);
 	const [answerChoices, setAnswerChoices] = useState([]);
 	const [helperText, setHelperText] = useState('');
@@ -159,6 +172,7 @@ function AddChallenge({ show, closeFn }) {
 
 	const recordingStopped = (recording) => {
 		setAudioUrl(recording.blobURL);
+		setAudioBlob(recording.blob);
 	};
 	const playAudio = () => {
 		if (audioURL) {
@@ -173,6 +187,9 @@ function AddChallenge({ show, closeFn }) {
 		setAnswerChoices([]);
 		setHelperText('');
 		closeFn(false);
+		setTimeout(() => {
+			setLoading(false);
+		}, 350);
 	}, [closeFn]);
 
 	const removeAnswerChoice = (idx) => {
@@ -214,8 +231,11 @@ function AddChallenge({ show, closeFn }) {
 			return;
 		} else {
 			if (answerChoices.some((item) => item.isAnswer)) {
-				createChallenge({ uid: user.uid, answerChoices, audioURL });
-				clearChallenge();
+				setLoading(true);
+				createChallenge(
+					{ uid: user.uid, answerChoices, audio: audioBlob },
+					clearChallenge
+				);
 			} else {
 				setHelperText('Select the correct answer');
 			}
@@ -231,6 +251,9 @@ function AddChallenge({ show, closeFn }) {
 	}, [audioURL]);
 	return (
 		<Container show={show}>
+			<LoadingWrapper show={loading}>
+				<ClipLoader size={100} color={'#537ea5'} loading />
+			</LoadingWrapper>
 			<Content>
 				<Title>New Challenge</Title>
 				<AudioContainer>
@@ -303,7 +326,7 @@ function AddChallenge({ show, closeFn }) {
 					<HelperText>{helperText}</HelperText>
 				</HelperContainer>
 				<ActionsContainer>
-					<Button bg="#fff" color="#bdbdbd">
+					<Button bg="#fff" color="#bdbdbd" onClick={() => closeFn(false)}>
 						Cancel
 					</Button>
 					<Button bg="#537ea5" color="#fff" onClick={validateAnswerChoices}>
