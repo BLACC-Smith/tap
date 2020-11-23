@@ -61,10 +61,12 @@ const ChallengeUI = ({ challenge }) => {
 				cursorColor: 'transparent',
 			})
 		);
-	}, []);
+	}, [challenge.storageId]);
+
 	useEffect(() => {
 		waveform && waveform.load(challenge.audio);
-	}, [waveform]);
+	}, [waveform, challenge.audio]);
+
 	useEffect(() => {
 		if (waveform) {
 			waveform.on('finish', () => setIsPlaying(false));
