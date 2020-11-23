@@ -37,8 +37,15 @@ const ChallengeUI = ({ challenge }) => {
 		'https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png?w=640';
 
 	const handlePlay = () => {
-		setIsPlaying(!isPlaying);
-		waveform.playPause();
+		if (isPlaying) {
+			waveform.pause();
+			setIsPlaying(false);
+		} else {
+			waveform.play();
+			setIsPlaying(true);
+		}
+		// setIsPlaying(!isPlaying);
+		// waveform.playPause();
 	};
 	useEffect(() => {
 		setWaveform(
@@ -60,6 +67,15 @@ const ChallengeUI = ({ challenge }) => {
 	useEffect(() => {
 		waveform && waveform.load(challenge.audio);
 	}, [waveform]);
+	useEffect(() => {
+		if (waveform) {
+			waveform.on('finish', () => setIsPlaying(false));
+			waveform.on('seek', () => {
+				waveform.play();
+				setIsPlaying(true);
+			});
+		}
+	});
 	return (
 		<Container>
 			<Image src={avi} />
