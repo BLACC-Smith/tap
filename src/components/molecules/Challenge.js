@@ -44,8 +44,6 @@ const ChallengeUI = ({ challenge }) => {
 			waveform.play();
 			setIsPlaying(true);
 		}
-		// setIsPlaying(!isPlaying);
-		// waveform.playPause();
 	};
 	useEffect(() => {
 		setWaveform(
