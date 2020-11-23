@@ -1,4 +1,5 @@
 import firebase, { auth, firestore, storage } from './config';
+import { v4 as uuidv4 } from 'uuid';
 
 export const addUser = (uid) => {
 	firestore
@@ -34,7 +35,8 @@ export const signInWithFacebook = () => {
 };
 export const createChallenge = async (data, onComplete) => {
 	try {
-		const storageRef = storage.ref(`recordings/${data.uid}/test`);
+		const storageId = uuidv4();
+		const storageRef = storage.ref(`recordings/${data.uid}/${storageId}`);
 		const uploadTask = storageRef.put(data.audio);
 		uploadTask.on(
 			'state_changed',
@@ -46,7 +48,7 @@ export const createChallenge = async (data, onComplete) => {
 				uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
 					firestore
 						.collection('challenges')
-						.add({ ...data, audio: downloadURL })
+						.add({ ...data, audio: downloadURL, storageId })
 						.then(() => onComplete())
 						.catch((err) => {
 							throw new Error(`createChallenge: ${err.toString()}`);

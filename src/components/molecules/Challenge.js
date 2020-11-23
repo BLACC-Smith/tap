@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import WaveSurfer from 'wavesurfer.js';
 
 const Container = styled.div`
 	width: 100%;
-	border: 1px solid;
+	box-shadow: 0 5px 10px rgba(200, 200, 200, 0.35);
 	border-radius: 16px;
 	padding: 16px;
 	display: flex;
@@ -23,29 +24,53 @@ const Icon = styled.i`
 	cursor: pointer;
 	transition: all 0.3s;
 `;
+const Waveform = styled.div`
+	width: 100%;
+	margin: 0 24px;
+`;
+
 const ChallengeUI = ({ challenge }) => {
-	const [audio, setAudio] = useState(null);
+	const [waveform, setWaveform] = useState(null);
+	const [isPlaying, setIsPlaying] = useState(false);
+
 	const avi =
 		'https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png?w=640';
 
-	useEffect(() => {
-		setAudio(new Audio(challenge.audio));
-	}, []);
-
-	const playAudio = () => {
-		if (audio?.paused) audio.play();
-		else audio.currentTime = 0;
+	const handlePlay = () => {
+		setIsPlaying(!isPlaying);
+		waveform.playPause();
 	};
+	useEffect(() => {
+		setWaveform(
+			WaveSurfer.create({
+				container: `#waveform-${challenge.storageId}`,
+				scrollParent: true,
+				barWidth: 5,
+				cursorWidth: 1,
+				backend: 'WebAudio',
+				height: 50,
+				progressColor: '#537ea5',
+				responsive: true,
+				waveColor: 'rgba(83,126,165,.25)',
+				barHeight: 30,
+				cursorColor: 'transparent',
+			})
+		);
+	}, []);
+	useEffect(() => {
+		waveform && waveform.load(challenge.audio);
+	}, [waveform]);
 	return (
 		<Container>
 			<Image src={avi} />
+			<Waveform id={`waveform-${challenge.storageId}`} />
 			<Icon
 				size={48}
 				color="#537ea5"
 				className="material-icons"
-				onClick={playAudio}
+				onClick={handlePlay}
 			>
-				play_circle
+				{isPlaying ? 'pause_circle' : 'play_circle'}
 			</Icon>
 		</Container>
 	);
