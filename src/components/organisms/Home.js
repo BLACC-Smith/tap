@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Header from '../molecules/Header';
 import AddChallenge from '../molecules/AddChallenge';
+import Feed from './Feed';
 
 const Container = styled.div`
 	height: 100vh;
@@ -42,7 +43,7 @@ const Underlay = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: 1;
+	z-index: ${({ show }) => (show ? 1 : -1)};
 `;
 
 function Home() {
@@ -50,13 +51,17 @@ function Home() {
 	return (
 		<Container>
 			<Header />
-			<Underlay onClick={() => showPopup && setShowPopup(false)} />
+			<Underlay
+				show={showPopup}
+				onClick={() => showPopup && setShowPopup(false)}
+			/>
 			<AddContainer>
 				<AddCTA onClick={() => setShowPopup(true)}>
 					<Icon className="material-icons">keyboard_voice</Icon>
 				</AddCTA>
 				<AddChallenge show={showPopup} closeFn={setShowPopup} />
 			</AddContainer>
+			<Feed />
 		</Container>
 	);
 }

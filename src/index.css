@@ -5,7 +5,9 @@
 	font-family: 'Roboto', sans-serif;
 	outline: none;
 }
-
+::-webkit-scrollbar {
+	display: none;
+}
 .sound-wave {
 	border-radius: 16px;
 	max-height: 50px;
