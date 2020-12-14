@@ -7,10 +7,12 @@ const Container = styled.div`
 	box-shadow: 0 5px 10px rgba(200, 200, 200, 0.35);
 	border-radius: 16px;
 	padding: 16px;
+	margin-bottom: 24px;
+`;
+const Preview = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 24px;
 `;
 const Image = styled.img`
 	width: 50px;
@@ -23,16 +25,64 @@ const Icon = styled.i`
 	color: ${({ color }) => color};
 	cursor: pointer;
 	transition: all 0.3s;
+	opacity: ${({ show }) => (show ? 1 : 0)};
+	${({ absolute }) =>
+		absolute ? 'position: absolute;top:12px;right:24px;' : ''}
 `;
 const Waveform = styled.div`
 	width: 100%;
 	margin: 0 24px;
 `;
+const AnswersContainer = styled.div`
+	transition: all 0.3s;
+	max-height: ${({ show }) => (show ? '25vh' : '0')};
+	margin-top: ${({ show }) => (show ? '24px' : '0')};
+	opacity: ${({ show }) => (show ? 1 : 0)};
+	overflow: hidden;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+`;
+const Answer = styled.p`
+	border: 1px solid;
+	padding: 16px;
+	border-radius: 6px;
+	cursor: pointer;
+	padding: 12px 16px;
+	width: 100%;
+	transition: all 0.3s;
+	color: #bdbdbd;
+	border: 1px solid #bdbdbd;
+	font-size: 16px;
+	line-height: 24px;
+	position: relative;
+	text-align: center;
+
+	${({ showCorrect }) =>
+		showCorrect
+			? `
+			border-radius: 30px;
+			background:#4CAF50;
+			border:0;
+			color: #fff;
+		`
+			: `
+			&:hover {
+				background: #e7f2f7;
+				border: 1px solid #537ea5;
+				color: #537ea5;
+			}
+			i {
+				right: 0;
+			}
+		`}
+`;
 
 const ChallengeUI = ({ challenge }) => {
 	const [waveform, setWaveform] = useState(null);
 	const [isPlaying, setIsPlaying] = useState(false);
-
+	const [showAnswers, setShowAnswers] = useState(false);
+	const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
 	const avi =
 		'https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png?w=640';
 
@@ -40,10 +90,15 @@ const ChallengeUI = ({ challenge }) => {
 		if (isPlaying) {
 			waveform.pause();
 			setIsPlaying(false);
+			setShowAnswers(false);
 		} else {
 			waveform.play();
 			setIsPlaying(true);
+			setShowAnswers(true);
 		}
+	};
+	const checkAnswer = (idx) => {
+		if (challenge.answerChoices[idx].isAnswer) setAnsweredCorrectly(true);
 	};
 	useEffect(() => {
 		setWaveform(
@@ -78,16 +133,39 @@ const ChallengeUI = ({ challenge }) => {
 	});
 	return (
 		<Container>
-			<Image src={avi} />
-			<Waveform id={`waveform-${challenge.storageId}`} />
-			<Icon
-				size={48}
-				color="#537ea5"
-				className="material-icons"
-				onClick={handlePlay}
-			>
-				{isPlaying ? 'pause_circle' : 'play_circle'}
-			</Icon>
+			<Preview>
+				<Image src={avi} />
+				<Waveform id={`waveform-${challenge.storageId}`} />
+				<Icon
+					size={48}
+					color="#537ea5"
+					className="material-icons"
+					onClick={handlePlay}
+					show
+				>
+					{isPlaying ? 'pause_circle' : 'play_circle'}
+				</Icon>
+			</Preview>
+			<AnswersContainer show={showAnswers}>
+				{challenge.answerChoices.map((el, idx) => (
+					<Answer
+						key={idx}
+						onClick={() => checkAnswer(idx)}
+						showCorrect={el.isAnswer && answeredCorrectly}
+					>
+						{el.answer}
+						<Icon
+							show={answeredCorrectly}
+							absolute
+							size={24}
+							color="#fff"
+							className="material-icons"
+						>
+							check_circle
+						</Icon>
+					</Answer>
+				))}
+			</AnswersContainer>
 		</Container>
 	);
 };
