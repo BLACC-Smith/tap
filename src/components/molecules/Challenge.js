@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import WaveSurfer from 'wavesurfer.js';
+import '../../index.css';
 
 const Container = styled.div`
 	width: 100%;
@@ -42,6 +43,7 @@ const AnswersContainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 16px;
+	justify-items: center;
 `;
 const Answer = styled.p`
 	border: 1px solid;
@@ -49,7 +51,7 @@ const Answer = styled.p`
 	border-radius: 6px;
 	cursor: pointer;
 	padding: 12px 16px;
-	width: 100%;
+	width: 75%;
 	transition: all 0.3s;
 	color: #bdbdbd;
 	border: 1px solid #bdbdbd;
@@ -76,6 +78,14 @@ const Answer = styled.p`
 				right: 0;
 			}
 		`}
+
+	${({ animateWrong }) =>
+		animateWrong
+			? `
+		animation-name: shake;
+		animation-duration: .5s
+		`
+			: ''}
 `;
 
 const ChallengeUI = ({ challenge }) => {
@@ -83,6 +93,8 @@ const ChallengeUI = ({ challenge }) => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [showAnswers, setShowAnswers] = useState(false);
 	const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
+	const [answeredIncorrectly, setAnsweredIncorrectly] = useState(false);
+
 	const avi =
 		'https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png?w=640';
 
@@ -99,6 +111,12 @@ const ChallengeUI = ({ challenge }) => {
 	};
 	const checkAnswer = (idx) => {
 		if (challenge.answerChoices[idx].isAnswer) setAnsweredCorrectly(true);
+		else {
+			setAnsweredIncorrectly(true);
+			setTimeout(() => {
+				setAnsweredIncorrectly(false);
+			}, 500);
+		}
 	};
 	useEffect(() => {
 		setWaveform(
@@ -152,6 +170,7 @@ const ChallengeUI = ({ challenge }) => {
 						key={idx}
 						onClick={() => checkAnswer(idx)}
 						showCorrect={el.isAnswer && answeredCorrectly}
+						animateWrong={!el.isAnswer && answeredIncorrectly}
 					>
 						{el.answer}
 						<Icon
