@@ -24,11 +24,28 @@ const Content = styled.div`
 	flex: 1;
 	overflow: scroll;
 `;
+const ChallengeHeader = styled.div`
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-end;
+	padding-top: 12px;
+	margin-bottom: 48px;
+`;
+const Topic = styled.input`
+	font-size: 20px;
+	color: #525456;
+	font-weight: 400;
+	border: none;
+	border-bottom: 1px solid #c8c8c8
+	&::placeholder {
+	}
+`;
+
 const Title = styled.p`
 	font-size: 24px;
 	color: #525456;
 	font-weight: 600;
-	margin-bottom: 48px;
+	margin-right: 12px;
 `;
 const AudioContainer = styled.div`
 	display: flex;
@@ -162,6 +179,7 @@ const LoadingWrapper = styled.div`
 
 function AddChallenge({ show, closeFn }) {
 	const [recording, setRecording] = useState(false);
+	const [topic, setTopic] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [audioURL, setAudioUrl] = useState('');
 	const [audioBlob, setAudioBlob] = useState(null);
@@ -183,6 +201,7 @@ function AddChallenge({ show, closeFn }) {
 	const clearChallenge = useCallback(() => {
 		setRecording(false);
 		setAudioUrl('');
+		setTopic('');
 		setAudio(null);
 		setAnswerChoices([]);
 		setHelperText('');
@@ -226,6 +245,10 @@ function AddChallenge({ show, closeFn }) {
 			setHelperText('Record yourself before posting this challenge');
 			return;
 		}
+		if (!topic) {
+			setHelperText('Add a topic before posting this challenge');
+			return;
+		}
 		if (answerChoices.length < 2) {
 			setHelperText('You must have at least 2 answer choices');
 			return;
@@ -233,7 +256,7 @@ function AddChallenge({ show, closeFn }) {
 			if (answerChoices.some((item) => item.isAnswer)) {
 				setLoading(true);
 				createChallenge(
-					{ uid: user.uid, answerChoices, audio: audioBlob },
+					{ uid: user.uid, answerChoices, audio: audioBlob, topic },
 					clearChallenge
 				);
 			} else {
@@ -255,7 +278,14 @@ function AddChallenge({ show, closeFn }) {
 				<ClipLoader size={100} color={'#537ea5'} loading />
 			</LoadingWrapper>
 			<Content>
-				<Title>New Challenge</Title>
+				<ChallengeHeader>
+					<Title>Challenge Topic: </Title>
+					<Topic
+						placeholder="(pop, rnb, etc...)"
+						value={topic}
+						onChange={(e) => setTopic(e.target.value)}
+					/>
+				</ChallengeHeader>
 				<AudioContainer>
 					<Icon
 						size={48}
