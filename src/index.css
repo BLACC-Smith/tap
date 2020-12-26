@@ -16,6 +16,24 @@
 	min-height: 50px;
 }
 
+@keyframes hide {
+	0% {
+		opacity: 1;
+		transform: translateX(0);
+		z-index: 1;
+	}
+	50% {
+		opacity: 1;
+		transform: translateX(-25vw) rotate(-30deg) scale(0.75);
+		z-index: -1;
+	}
+	90% {
+		opacity: 0;
+		transform: translateX(-25vw) rotate(-30deg) scale(0.75);
+		z-index: -1;
+	}
+}
+
 @keyframes shake {
 	0% {
 		transform: translateX(-10%);
