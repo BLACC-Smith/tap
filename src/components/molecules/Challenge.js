@@ -8,7 +8,8 @@ import { updatePlayedChallenges } from '../../firebase/functions';
 const Container = styled.div`
 	background: #fff;
 	height: 100%;
-	width: 375px;
+	width: 85%;
+	max-width: 375px;
 	max-height: 65vh;
 	box-shadow: 0 0 10px rgba(200, 200, 200, 0.35);
 	border-radius: 16px;
@@ -16,7 +17,7 @@ const Container = styled.div`
 	position: absolute;
 	margin-bottom: 24px;
 	display: grid;
-	grid-template-rows: 1fr 1fr;
+	grid-template-rows: 1fr 2fr;
 	align-items: center;
 	${({ remove }) =>
 		remove
@@ -34,15 +35,6 @@ const Container = styled.div`
 		animation-fill-mode: forwards;
 		`
 			: ''}
-`;
-const Image = styled.img`
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	object-fit: cover;
-	position: absolute;
-	top: 12px;
-	left: 12px;
 `;
 const IconWrapper = styled.div`
 	background: #fff;
@@ -63,7 +55,7 @@ const Icon = styled.i`
 `;
 const Waveform = styled.div`
 	width: 100%;
-	padding: 8px 24px;
+	padding: 0 8px;
 	position: relative;
 	z-index: 1;
 `;
@@ -76,10 +68,7 @@ const ActionsContainer = styled.div`
 	align-items: center;
 `;
 const AnswersContainer = styled.div`
-	transition: all 0.3s;
-	max-height: ${({ show }) => (show ? '25vh' : '0')};
-	margin-top: ${({ show }) => (show ? '24px' : '0')};
-	opacity: ${({ show }) => (show ? 1 : 0)};
+	opacity: 1;
 	overflow: hidden;
 	display: grid;
 	grid-template-rows: 1fr;
@@ -139,12 +128,8 @@ const ChallengeUI = ({
 	answeredCorrectly,
 	answeredIncorrectly,
 }) => {
-	const avi =
-		'https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png?w=640';
-
 	return (
 		<Container remove={removeChallenge} answeredCorrectly={answeredCorrectly}>
-			<Image src={avi} />
 			<ActionsContainer>
 				<IconWrapper bg={numChances > 1 ? 'red' : '#bdbdbd'}>
 					<Icon className="material-icons">close</Icon>
@@ -159,7 +144,7 @@ const ChallengeUI = ({
 				</IconWrapper>
 			</ActionsContainer>
 			<Waveform id={`waveform-${challenge.storageId}`}></Waveform>
-			<AnswersContainer show>
+			<AnswersContainer>
 				{challenge.answerChoices.map((el) => (
 					<Answer
 						key={el.id}

@@ -10,6 +10,10 @@ const Container = styled.div`
 	overflow: hidden;
 	margin-left: 24px;
 	position: relative;
+
+	@media (max-width: 600px) {
+		margin: 0;
+	}
 `;
 const AddCTA = styled.div`
 	height: 50px;

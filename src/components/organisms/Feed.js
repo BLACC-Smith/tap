@@ -11,6 +11,10 @@ const Container = styled.div`
 	position: relative;
 	justify-content: center;
 	align-items: center;
+
+	@media (max-width: 600px) {
+		padding-bottom: 10vh;
+	}
 `;
 
 const FeedUI = ({ challenges, updateChallenges, user }) => {
