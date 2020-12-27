@@ -21,7 +21,15 @@ const Container = styled.div`
 	${({ remove }) =>
 		remove
 			? `
-		animation-name: hide;
+		animation-name: hide-left;
+		animation-duration: .5s;
+		animation-fill-mode: forwards;
+		`
+			: ''}
+	${({ answeredCorrectly }) =>
+		answeredCorrectly
+			? `
+		animation-name: hide-right;
 		animation-duration: .5s;
 		animation-fill-mode: forwards;
 		`
@@ -135,7 +143,7 @@ const ChallengeUI = ({
 		'https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png?w=640';
 
 	return (
-		<Container remove={removeChallenge}>
+		<Container remove={removeChallenge} answeredCorrectly={answeredCorrectly}>
 			<Image src={avi} />
 			<ActionsContainer>
 				<IconWrapper bg={numChances > 1 ? 'red' : '#bdbdbd'}>
@@ -186,7 +194,7 @@ const Challenge = ({ challenge, updateChallenges }) => {
 			setTimeout(() => {
 				updateChallenges(challenge.id);
 				updatePlayedChallenges(user.uid, challenge.id);
-			}, 1000);
+			}, 650);
 		}
 	}, [numChances, updateChallenges, challenge.id]);
 
@@ -233,8 +241,13 @@ const Challenge = ({ challenge, updateChallenges }) => {
 		}
 	};
 	const checkAnswer = (idx) => {
-		if (challenge.answerChoices[idx - 1].isAnswer) setAnsweredCorrectly(true);
-		else {
+		if (challenge.answerChoices[idx - 1].isAnswer) {
+			setAnsweredCorrectly(true);
+			setTimeout(() => {
+				updateChallenges(challenge.id);
+				updatePlayedChallenges(user.uid, challenge.id);
+			}, 650);
+		} else {
 			setSelectedId(idx);
 			if (numChances === 2) {
 				setNumChances(numChances + 1);
