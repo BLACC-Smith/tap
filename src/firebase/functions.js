@@ -9,6 +9,7 @@ export const addUser = (uid) => {
 			challenges: [],
 			followers: [],
 			following: [],
+			playedChallenges: [],
 		})
 		.catch((err) => console.log({ err }));
 };
@@ -78,5 +79,32 @@ export const getChallenges = async (callback) => {
 		callback(data);
 	} catch (error) {
 		throw new Error(`getChallenges: ${error}`);
+	}
+};
+
+export const getUser = async (uid) => {
+	try {
+		const doc = await firestore.collection('users').doc(uid).get();
+		if (!doc.exists) return;
+		return doc.data();
+	} catch (error) {
+		throw new Error(`getUser: ${error}`);
+	}
+};
+export const updatePlayedChallenges = async (uid, challengeId) => {
+	try {
+		const doc = await firestore.collection('users').doc(uid).get();
+		if (!doc.exists) return;
+		await firestore
+			.collection('users')
+			.doc(uid)
+			.set(
+				{
+					playedChallenges: [...doc.data().playedChallenges, challengeId],
+				},
+				{ merge: true }
+			);
+	} catch (error) {
+		throw new Error(`updatePlayedChallenges: ${error}`);
 	}
 };

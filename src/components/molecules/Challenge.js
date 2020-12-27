@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import WaveSurfer from 'wavesurfer.js';
 import '../../index.css';
+import { MainContext } from '../../context/MainContext';
+import { updatePlayedChallenges } from '../../firebase/functions';
 
 const Container = styled.div`
-	width: 50%;
-	height: 100%;
 	background: #fff;
-	max-height: 75vh;
+	height: 100%;
+	width: 375px;
+	max-height: 65vh;
 	box-shadow: 0 0 10px rgba(200, 200, 200, 0.35);
 	border-radius: 16px;
 	padding: 16px 0;
 	position: absolute;
 	margin-bottom: 24px;
-	margin-top: -24px;
 	display: grid;
 	grid-template-rows: 1fr 1fr;
 	align-items: center;
@@ -137,7 +138,7 @@ const ChallengeUI = ({
 		<Container remove={removeChallenge}>
 			<Image src={avi} />
 			<ActionsContainer>
-				<IconWrapper bg={numChances > 2 ? 'red' : '#bdbdbd'}>
+				<IconWrapper bg={numChances > 1 ? 'red' : '#bdbdbd'}>
 					<Icon className="material-icons">close</Icon>
 				</IconWrapper>
 				<IconWrapper bg="#537ea5" main remove={false}>
@@ -169,6 +170,7 @@ const ChallengeUI = ({
 };
 
 const Challenge = ({ challenge, updateChallenges }) => {
+	const { user } = useContext(MainContext);
 	const [waveform, setWaveform] = useState(null);
 	const [numChances, setNumChances] = useState(0);
 	const [selectedId, setSelectedId] = useState(null);
@@ -178,12 +180,13 @@ const Challenge = ({ challenge, updateChallenges }) => {
 	const [removeChallenge, setRemoveChallenge] = useState(false);
 
 	useEffect(() => {
-		if (numChances > 2) {
+		if (numChances > 1) {
 			setRemoveChallenge(true);
 			waveform.pause();
 			setTimeout(() => {
 				updateChallenges(challenge.id);
-			}, 650);
+				updatePlayedChallenges(user.uid, challenge.id);
+			}, 1000);
 		}
 	}, [numChances, updateChallenges, challenge.id]);
 
