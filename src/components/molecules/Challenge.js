@@ -196,7 +196,7 @@ const Challenge = ({ challenge, updateChallenges }) => {
 				updatePlayedChallenges(user.uid, challenge.id);
 			}, 650);
 		}
-	}, [numChances, updateChallenges, challenge.id]);
+	}, [numChances, waveform, updateChallenges, challenge.id, user.uid]);
 
 	useEffect(() => {
 		waveform && waveform.load(challenge.audio);
