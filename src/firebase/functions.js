@@ -9,6 +9,7 @@ export const addUser = (uid) => {
 			challenges: [],
 			followers: [],
 			following: [],
+			playedChallenges: [],
 		})
 		.catch((err) => console.log({ err }));
 };
@@ -48,7 +49,12 @@ export const createChallenge = async (data, onComplete) => {
 				uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
 					firestore
 						.collection('challenges')
-						.add({ ...data, audio: downloadURL, storageId })
+						.add({
+							...data,
+							audio: downloadURL,
+							storageId,
+							createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+						})
 						.then(() => onComplete())
 						.catch((err) => {
 							throw new Error(`createChallenge: ${err.toString()}`);
@@ -64,15 +70,41 @@ export const createChallenge = async (data, onComplete) => {
 export const getChallenges = async (callback) => {
 	try {
 		const snapshot = await firestore.collection('challenges').get();
-		if (snapshot.empty)
-			throw new Error('getChallenges: Error getting challenges');
+		if (snapshot.empty) callback([]);
 
 		const data = [];
 		snapshot.forEach((doc) => {
-			data.push(doc.data());
+			data.push({ ...doc.data(), id: doc.id });
 		});
 		callback(data);
 	} catch (error) {
 		throw new Error(`getChallenges: ${error}`);
+	}
+};
+
+export const getUser = async (uid) => {
+	try {
+		const doc = await firestore.collection('users').doc(uid).get();
+		if (!doc.exists) return;
+		return doc.data();
+	} catch (error) {
+		throw new Error(`getUser: ${error}`);
+	}
+};
+export const updatePlayedChallenges = async (uid, challengeId) => {
+	try {
+		const doc = await firestore.collection('users').doc(uid).get();
+		if (!doc.exists) return;
+		await firestore
+			.collection('users')
+			.doc(uid)
+			.set(
+				{
+					playedChallenges: [...doc.data().playedChallenges, challengeId],
+				},
+				{ merge: true }
+			);
+	} catch (error) {
+		throw new Error(`updatePlayedChallenges: ${error}`);
 	}
 };
