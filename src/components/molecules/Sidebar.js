@@ -16,6 +16,15 @@ const Container = styled.div`
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
+
+	@media (max-width: 600px) {
+		height: 10%;
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		padding: 0;
+		border-radius: 16px 16px 0 0;
+	}
 `;
 const Icon = styled.i`
 	color: ${({ active }) => (active ? '#ffc000' : '#c8c8c8')};
@@ -30,6 +39,13 @@ const NavContainer = styled.div`
 	width: 100%;
 	justify-content: center;
 	align-items: center;
+
+	@media (max-width: 600px) {
+		flex: 1;
+		justify-items: center;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+	}
 `;
 const LogoContainer = styled.div`
 	flex: 1;
@@ -37,6 +53,9 @@ const LogoContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	@media (max-width: 600px) {
+		display: none;
+	}
 `;
 const Logo = styled.img`
 	height: 35px;
@@ -51,6 +70,10 @@ const AccountInfo = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: flex-end;
+
+	@media (max-width: 600px) {
+		display: none;
+	}
 `;
 const Logout = styled.div`
 	padding: 12px;
