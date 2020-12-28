@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { MainContext } from '../../context/MainContext';
 import tapLogo from '../../assets/tapLogo_D.jpg';
 import { auth } from '../../firebase/config';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
 	height: 100%;
@@ -16,6 +17,7 @@ const Container = styled.div`
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
+	z-index: 10;
 
 	@media (max-width: 600px) {
 		height: 10%;
@@ -26,11 +28,13 @@ const Container = styled.div`
 		border-radius: 16px 16px 0 0;
 	}
 `;
+const IconWrapper = styled.div`
+	flex: 1;
+	cursor: pointer;
+`;
 const Icon = styled.i`
 	color: ${({ active }) => (active ? '#ffc000' : '#c8c8c8')};
 	font-size: 32px;
-	flex: 1;
-	cursor: pointer;
 `;
 const NavContainer = styled.div`
 	flex: 3;
@@ -99,12 +103,23 @@ function Sidebar() {
 				<Logo src={tapLogo} />
 			</LogoContainer>
 			<NavContainer>
-				<Icon active className="material-icons">
-					home
-				</Icon>
-				<Icon className="material-icons">favorite</Icon>
-				<Icon className="material-icons">dashboard</Icon>
-				<Icon className="material-icons">person</Icon>
+				<IconWrapper>
+					<Link to="/home">
+						<Icon active className="material-icons">
+							home
+						</Icon>
+					</Link>
+				</IconWrapper>
+				<IconWrapper>
+					<Link to="/my-challenges">
+						<Icon className="material-icons">dashboard</Icon>
+					</Link>
+				</IconWrapper>
+				<IconWrapper>
+					<Link to="/account">
+						<Icon className="material-icons">person</Icon>
+					</Link>
+				</IconWrapper>
 			</NavContainer>
 			<AccountInfo>
 				<Logout onClick={logout}>Logout</Logout>

@@ -18,7 +18,6 @@ const Container = styled.div`
 `;
 
 const FeedUI = ({ challenges, updateChallenges, user }) => {
-	console.log({ user });
 	return !user ? null : (
 		<Container>
 			{challenges

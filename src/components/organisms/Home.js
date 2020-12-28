@@ -30,10 +30,6 @@ const AddCTA = styled.div`
 		transform: translateY(-10px);
 		box-shadow: 0 5px 25px #537ea5;
 	}
-
-	@media (max-width: 600px) {
-		display: none;
-	}
 `;
 const Icon = styled.i`
 	font-size: 24px;
@@ -43,7 +39,7 @@ const AddContainer = styled.div`
 	position: absolute;
 	bottom: 24px;
 	right: 24px;
-	z-index: 5;
+	z-index: 15;
 `;
 const Underlay = styled.div`
 	width: 100%;

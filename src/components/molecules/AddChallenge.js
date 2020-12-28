@@ -19,6 +19,12 @@ const Container = styled.div`
 	box-shadow: 0 0 15px #c8c8c8;
 	transition: all 0.3s;
 	padding: 16px;
+
+	@media (max-width: 600px) {
+		left: calc(98px - 100vw);
+		width: calc(100vw - 48px);
+		margin-top: -24px;
+	}
 `;
 const Content = styled.div`
 	flex: 1;
